@@ -8,7 +8,7 @@ It is not necessarily using best practices, as simplicity and ease of digestion 
 
 1. Install the galaxy roles using `ansible-galaxy install -r requirements.yaml`
 1. boto3 and botocore installed on your localhost
-1. Update the vars in this play to match your VPC, subnet etc.
+1. Update the vars in `provision.yaml` to match your VPC, subnet etc.
 1. Update the private key file in `ansible.cfg`
 
 ## Running
