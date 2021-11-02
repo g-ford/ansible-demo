@@ -1,0 +1,55 @@
+---
+- name: Install php
+  package:
+    name: "{{ item }}"
+    state: latest
+    update_cache: true
+  loop:
+    - php
+    - php-fpm
+    - php-common
+    - php-cli
+    - php-curl
+    - php-mysql
+
+- name: Stop apache
+  service:
+    name: apache2
+    state: stopped
+
+- name: Remove apache
+  package:
+    name: apache2
+    state: absent
+
+- name: Install nginx
+  package:
+    name: nginx
+    state: latest
+    update_cache: true
+  become: true
+
+- name: Remove default vhost
+  file:
+    path: "/etc/nginx/sites-enabled/default"
+    state: absent
+  notify: Restart nginx
+
+- name: "Create {{ domain_name }} vhost"
+  template:
+    src: vhost.j2
+    dest: "/etc/nginx/sites-enabled/vhost-{{ domain_name }}"
+  notify: Restart nginx
+
+- name: Create web-root directory
+  file:
+    path: /var/www/{{ domain_name }}
+    state: directory
+
+- name: Upload web files
+  template:
+    src: "{{ item }}"
+    dest: /var/www/{{ domain_name }}/{{ item | replace('.j2', '')}}
+  loop:
+    - index.php.j2
+    - db-test.php.j2

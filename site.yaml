@@ -1,0 +1,21 @@
+- name: Configure web server
+  hosts: tag_role_web
+  become: true
+
+  roles:
+    - web
+
+- name: Configure database
+  hosts: tag_role_db
+
+  roles:
+    - role: geerlingguy.mysql
+      become: yes
+      vars:
+        mysql_databases:
+          - name: demo
+        mysql_users:
+          - name: demo
+            password: demo
+            host: "%"
+            priv: "demo.*:ALL"

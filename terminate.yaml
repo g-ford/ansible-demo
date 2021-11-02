@@ -1,0 +1,11 @@
+- name: Terminate all
+  hosts: "!localhost"
+
+  tasks:
+    - name: Terminate ec2
+      delegate_to: localhost
+      delegate_facts: true
+      ec2:
+        state: absent
+        instance_ids:
+          - "{{ instance_id }}"
