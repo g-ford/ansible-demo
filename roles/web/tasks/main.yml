@@ -13,6 +13,7 @@
     - php-mysql
 
 - name: Stop apache
+  ignore_errors: true
   service:
     name: apache2
     state: stopped
